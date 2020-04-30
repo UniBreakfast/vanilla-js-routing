@@ -21,25 +21,30 @@ const subPages = {
   }
 }
 
-onload =()=> {
-  goto(doc.title || subPages[ls.page])
-}
+let path = getPath()
+if (path) goto(path)
+else onload =()=> goto(getPath() || ls.page)
+
 
 async function goto(path='home') {
   const page = subPages[path]
   document.title = page.title
 
-  if (!page.html) page.html = await(await fetch(page.htmlFile)).text()
+  if (!page.html) page.html = await(await fetch(`/${path}/${page.htmlFile}`)).text()
   mainWrapper.innerHTML = page.html
 
   if (typeof subPageStyling != 'undefined') subPageStyling.remove()
   const link = doc.createElement('link')
   link.id = 'subPageStyling'
   link.rel = 'stylesheet'
-  link.href = page.cssFile
+  link.href = `/${path}/${page.cssFile}`
   head.append(link)
 
   history.pushState({path}, path, '/'+path);
 
   ls.page = path
+}
+
+function getPath() {
+  return /([^/]*)\/?$/.exec(location.pathname)[1]
 }

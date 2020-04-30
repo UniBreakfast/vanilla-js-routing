@@ -1,0 +1,9 @@
+main {
+  border: 1px dashed;
+  width: 800px;
+  min-height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

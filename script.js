@@ -1,0 +1,1 @@
+const doc = document,  {head, body} = doc,  ls = localStorage

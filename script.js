@@ -1,1 +1,2 @@
-const doc = document,  {head, body} = doc,  ls = localStorage
+const doc = document,  {head, body} = doc,  {assign} = Object,
+      ls = localStorage

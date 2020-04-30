@@ -21,8 +21,10 @@ const subPages = {
   }
 }
 
-// github.io fix - here "vanilla-js-routing" is my repo name
-subPages["vanilla-js-routing"] = subPages.home
+// fix for cases where site is hosted deeper than the root
+// you can simply assign a number that shows how deeply is your site hosted
+const rootDepth = location.host.endsWith('.github.io')? 1 : 0,
+    rootPath = location.pathname.match(/\/[^/]*/g).slice(0, rootDepth).join('')
 
 let path = getPath()
 if (path) goto(path)
@@ -33,21 +35,21 @@ async function goto(path='home') {
   const page = subPages[path]
   document.title = page.title
 
-  if (!page.html) page.html = await(await fetch(`/${path}/${page.htmlFile}`)).text()
+  if (!page.html) page.html =
+    await(await fetch(`${rootPath}/${path}/${page.htmlFile}`)).text()
   mainWrapper.innerHTML = page.html
 
   if (typeof subPageStyling != 'undefined') subPageStyling.remove()
-  const link = doc.createElement('link')
-  link.id = 'subPageStyling'
-  link.rel = 'stylesheet'
-  link.href = `/${path}/${page.cssFile}`
-  head.append(link)
 
-  history.pushState({path}, path, '/'+path);
+  if (page.cssFile) head.append(assign(doc.createElement('link'),
+    {rel: 'stylesheet', href: `${rootPath}/${path}/${page.cssFile}`,
+      id: 'subPageStyling'}))
+
+  history.pushState({path}, path, rootPath+'/'+path)
 
   ls.page = path
 }
 
 function getPath() {
-  return /([^/]*)\/?$/.exec(location.pathname)[1]
+  return /([^/]*)\/?$/.exec(location.pathname.slice(rootPath.length))[1]
 }

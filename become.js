@@ -1,6 +1,8 @@
 fetch(loader.dataset.src).then(r=>r.text()).then(html => {
   ({head, body} = doc = document)
 
+  html = html.replace(/((src=")|(href="))/g, '$1../')
+
   body.innerHTML = /<body>([\s\S]*)<\/body>/.exec(html)[0]
 
   const headHtml = /<head>([\s\S]*)<\/head>/.exec(html)[0]

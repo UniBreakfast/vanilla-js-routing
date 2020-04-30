@@ -21,7 +21,7 @@ const subPages = {
   }
 }
 
-// github.io fix
+// github.io fix - here "vanilla-js-routing" is my repo name
 subPages["vanilla-js-routing"] = subPages.home
 
 let path = getPath()

@@ -21,8 +21,8 @@ const subPages = {
   }
 }
 
-// fix for cases where site is hosted deeper than the root
-// you can simply assign a number that shows how deeply is your site hosted
+// a fix for the cases where site is hosted deeper than the root level
+// you can simply assign a number that tells how deeply is your site hosted
 const rootDepth = location.host.endsWith('.github.io')? 1 : 0,
     rootPath = location.pathname.match(/\/[^/]*/g).slice(0, rootDepth).join('')
 
@@ -30,20 +30,24 @@ let path = getPath()
 if (path) goto(path)
 else onload =()=> goto(getPath() || ls.page)
 
+onpopstate = e => goto(e.state.path)
+
 
 async function goto(path='home') {
   const page = subPages[path]
   document.title = page.title
 
-  if (!page.html) page.html =
+  if (!page.html && page.htmlFile) page.html =
     await(await fetch(`${rootPath}/${path}/${page.htmlFile}`)).text()
-  mainWrapper.innerHTML = page.html
+  if (page.html) mainWrapper.innerHTML = page.html
 
-  if (typeof subPageStyling != 'undefined') subPageStyling.remove()
+  try { subPageStyling.remove() } catch {}
 
-  if (page.cssFile) head.append(assign(doc.createElement('link'),
-    {rel: 'stylesheet', href: `${rootPath}/${path}/${page.cssFile}`,
-      id: 'subPageStyling'}))
+  if (!page.css && page.cssFile) page.css =
+    await(await fetch(`${rootPath}/${path}/${page.cssFile}`)).text()
+
+  if (page.css) head.append(assign(doc.createElement('style'),
+                  {innerHTML: page.css, id: 'subPageStyling'}))
 
   history.pushState({path}, path, rootPath+'/'+path)
 

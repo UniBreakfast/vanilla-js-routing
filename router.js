@@ -21,6 +21,9 @@ const subPages = {
   }
 }
 
+// github.io fix
+subPages["vanilla-js-routing"] = subPages.home
+
 let path = getPath()
 if (path) goto(path)
 else onload =()=> goto(getPath() || ls.page)

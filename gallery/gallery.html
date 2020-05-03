@@ -1,12 +1,16 @@
 <main>
   <button onclick="goto('home')">Back to Main menu (Home page)</button>
 
-  <input type="number" id="imageWidth" title="image width" min="50" max="1000">
-  <input type="number" id="imageHeight" title="image height" min="50" max="800">
-  <input type="number" id="imageCount" title="how many" min="1" max="100">
-  <input type="number" id="imageGap" title="space between" min="0" max = "100">
+  <input type="number" id="imageWidth" title="image width"
+          min="50" max="1000" value="140">
+  <input type="number" id="imageHeight" title="image height"
+          min="50" max="800" value="90">
+  <input type="number" id="imageCount" title="how many"
+          min="1" max="100" value="12">
+  <input type="number" id="imageGap" title="space between"
+          min="0" max="100" value="10">
 
-  <ul class="gallery">
+  <ul id="gallery">
     <li><img src="https://picsum.photos/width/height" alt="lorem picsum"></li>
   </ul>
 </main>

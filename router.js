@@ -18,6 +18,8 @@ const subPages = {
     htmlFile: 'gallery.html',
     css: '',
     cssFile: 'gallery.css',
+    js: 'galleryInit()',
+    jsFile: 'gallery.js'
   }
 }
 
@@ -42,18 +44,23 @@ async function goto(path, saveHistory=true) {
   document.title = page.title
 
   if (!page.html && page.htmlFile)
-    page.html = await (await fetch(`${rootPath}/${path}/${page.htmlFile}`)
-                              .catch(()=>'')).text()
-  if (page.html) mainWrapper.innerHTML = page.html
+    page.html = await fetchTxt(`${rootPath}/${path}/${page.htmlFile}`)
+
+  if (page.html) mainWrapper.html(page.html)
 
   try { subPageStyling.remove() } catch {}
 
   if (!page.css && page.cssFile)
-    page.css = await (await fetch(`${rootPath}/${path}/${page.cssFile}`)
-                              .catch(()=>'')).text()
+    page.css = await fetchTxt(`${rootPath}/${path}/${page.cssFile}`)
 
-  if (page.css) head.append(assign(doc.createElement('style'),
-                  {innerHTML: page.css, id: 'subPageStyling'}))
+  if (page.css)
+    head.append(crEl('style', {innerHTML: page.css, id: 'subPageStyling'}))
+
+  if (page.jsFile &&
+      !doc.querySelector(`[src="${rootPath}/${path}/${page.jsFile}"]`))
+        head.append(crEl('script', {src: `${rootPath}/${path}/${page.jsFile}`}))
+
+  try { if (page.js) eval(page.js) } catch {}
 
   ls.page = path
 }

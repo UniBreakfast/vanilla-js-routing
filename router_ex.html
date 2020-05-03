@@ -70,9 +70,9 @@
     }
     function push(id) {
       select_tab(id);
-      document.title = id;
       load_content(id);
       history.pushState({ id }, id, '/'+id);
+      document.title = id;
     }
 
     onpopstate = e => {

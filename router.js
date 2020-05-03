@@ -30,30 +30,35 @@ let path = getPath()
 if (path) goto(path)
 else onload =()=> goto(getPath() || ls.page)
 
-onpopstate = e => goto(e.state.path)
+onpopstate = e => goto((e.state || {path}).path, false)
 
 
-async function goto(path='home') {
+async function goto(path, saveHistory=true) {
+  path = path || 'home'
+
+  if (saveHistory) history.pushState({path}, path, rootPath+'/'+path)
+
   const page = subPages[path]
   document.title = page.title
 
-  if (!page.html && page.htmlFile) page.html =
-    await(await fetch(`${rootPath}/${path}/${page.htmlFile}`)).text()
+  if (!page.html && page.htmlFile)
+    page.html = await (await fetch(`${rootPath}/${path}/${page.htmlFile}`)
+                              .catch(()=>'')).text()
   if (page.html) mainWrapper.innerHTML = page.html
 
   try { subPageStyling.remove() } catch {}
 
-  if (!page.css && page.cssFile) page.css =
-    await(await fetch(`${rootPath}/${path}/${page.cssFile}`)).text()
+  if (!page.css && page.cssFile)
+    page.css = await (await fetch(`${rootPath}/${path}/${page.cssFile}`)
+                              .catch(()=>'')).text()
 
   if (page.css) head.append(assign(doc.createElement('style'),
                   {innerHTML: page.css, id: 'subPageStyling'}))
-
-  history.pushState({path}, path, rootPath+'/'+path)
 
   ls.page = path
 }
 
 function getPath() {
-  return /([^/]*)\/?$/.exec(location.pathname.slice(rootPath.length))[1]
+  return /([^/]*)\/?$/
+    .exec(location.pathname.replace('/index.html','').slice(rootPath.length))[1]
 }

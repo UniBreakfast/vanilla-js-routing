@@ -21,3 +21,8 @@ main.default {
   padding: 200px;
   margin-top: 20px;
 }
+
+#mainWrapper {
+  max-width: 1000px;
+  margin: auto;
+}

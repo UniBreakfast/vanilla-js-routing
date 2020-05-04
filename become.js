@@ -18,13 +18,16 @@ fetch(loader.dataset.src).then(r=>r.text()).then(html => {
   })
 
   const scripts = headHtml.match(/(?<=<script )[^>]*(?=>)/g)
-  if (scripts) scripts.forEach(attrs => {
+  if (scripts) scripts.map(attrs => {
     const script = doc.createElement('script')
     attrs.split(/(?<=") /).forEach(attr => {
       const [key, value] = attr.split('="')
       if (value) script[key] = value.slice(0, -1)
     })
-    head.append(script)
+    return [()=> head.append(script), script]
+  }).forEach(([loadScript, script], i, scripts) => {
+    if (!i) loadScript()
+    script.onload = (scripts[i+1] || [])[0]
   })
 
   loader.remove()

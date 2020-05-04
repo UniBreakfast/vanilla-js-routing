@@ -46,7 +46,7 @@ async function goto(path, saveHistory=true) {
   if (!page.html && page.htmlFile)
     page.html = await fetchTxt(`${rootPath}/${path}/${page.htmlFile}`)
 
-  if (page.html) mainWrapper.html(page.html)
+  if (page.html) mainWrapper.htm(page.html)
 
   try { subPageStyling.remove() } catch {}
 

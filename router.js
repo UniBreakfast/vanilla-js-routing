@@ -44,14 +44,14 @@ async function goto(path, saveHistory=true) {
   document.title = page.title
 
   if (!page.html && page.htmlFile)
-    page.html = await fetchTxt(`${rootPath}/${path}/${page.htmlFile}`)
+    page.html = await getTxt(`${rootPath}/${path}/${page.htmlFile}`)
 
   if (page.html) mainWrapper.htm(page.html)
 
   try { subPageStyling.remove() } catch {}
 
   if (!page.css && page.cssFile)
-    page.css = await fetchTxt(`${rootPath}/${path}/${page.cssFile}`)
+    page.css = await getTxt(`${rootPath}/${path}/${page.cssFile}`)
 
   if (page.css)
     head.append(crEl('style', {innerHTML: page.css, id: 'subPageStyling'}))

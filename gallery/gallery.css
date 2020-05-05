@@ -12,8 +12,17 @@ ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  filter: saturate(1.1);
 }
 
 #gallery li {
   margin: var(--gap);
+  height: var(--height);
+  width: var(--width);
+  transition: opacity 2s;
+  opacity: 1;
+}
+
+#gallery .empty {
+  opacity: 0;
 }

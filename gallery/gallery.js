@@ -5,18 +5,9 @@ const li0 = gallery.first()
 
 galleryInit()
 
-imageWidth.onchange =()=> {
-  storeGalleryParams()
-}
-imageHeight.onchange =()=> {
-  storeGalleryParams()
-}
-imageCount.onchange =()=> {
-  storeGalleryParams()
-}
-imageGap.onchange =()=> {
-  storeGalleryParams()
-}
+{[imageWidth, imageHeight, imageCount, imageGap]
+  .forEach(input => input.onchange = storeGalleryParams)}
+
 
 function storeGalleryParams() {
   ls.gallery = stringify(fromEntries(galleryParams.map(param =>
@@ -38,6 +29,8 @@ function fillGallery() {
   gallery.htm()
   li0.copy(+imageCount.value).forEach(li => gallery.append(li.change('first',
     {src: li0.first().dataset.src.replace('width', imageWidth.value)
-      .replace('height', imageHeight.value)+'?random='+rnd(1e5)})))
-  gallery.style.setProperty('--gap', imageGap.value/2+'px')
+      .replace('height', imageHeight.value)+'?random='+rnd(1e5),
+      onload: e => e.target.parent().class('empty', -1)})))
+  entries({'--gap': imageGap.value/2+'px', '--width': imageWidth.value+'px','--height': imageHeight.value+'px'}).forEach(pair =>
+      gallery.style.setProperty(...pair))
 }

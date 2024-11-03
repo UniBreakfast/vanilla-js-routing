@@ -1,4 +1,4 @@
-# vanilla-js-routing
+# [vanilla-js-routing](https://github.com/UniBreakfast/vanilla-js-routing)
 ## Two different examples!
 
 ### [Example 1](https://unibreakfast.github.io/vanilla-js-routing) - with real links
